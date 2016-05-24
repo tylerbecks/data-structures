@@ -178,5 +178,93 @@ DoublyLinkedList.prototype = {
 		}
 	},
 
-	
+}
+
+// Create the BinarySearchTree Constructor
+function BinarySearchTree() {
+	this._root = null;
+};
+
+BinarySearchTree.prototype = {
+
+	// restore constructor
+	constructor: BinarySearchTree,
+
+	add: function(value) {
+		var current = this._root;
+		var node = {
+			value: value,
+			right: null,
+			left: null
+		};
+
+		//special case: no items in tree yet
+		if(this._root === null) {
+			this._root = node;
+		} else {
+
+			while(true) {
+				//if the value is greater than this node's value, go right
+				 if(value > current.value) {
+				 	//if there's no value there, this is our new node's home
+				 	if(current.right === null) {
+				 		current.right = node;
+				 		break;
+				 	}
+				 	//otherwise, keep going
+				 	current = current.right;
+				 //if the value is less than this node's value, go left
+				 } else if(value < current.value){
+				 	//if there's no value there, this is our new node's home
+				 	if(current.left === null) {
+				 		current.left = node;
+				 		break;
+				 	}
+				 	//otherwise, keep going
+				 	current = current.left;
+				 //if the new value is equal to the current one, just ignore
+				 } else {
+				 	console.log("Already exists in the tree.")
+				 	break;
+				 }
+			}
+
+		}
+	},
+
+	// Accepts a value as an argument and returns true if the value is present in the tree of false if not.
+	contains: function(value) {
+		var found = false;
+		var current = this._root;
+
+		//make sure there's a node to search
+		while(!found && current.value){
+
+			// if the value is less than the curret node's, go left
+			if(value < current.value) {
+				current = current.left;
+			// or if the value is greated than the current node's, go right
+			} else if(value > current.value) {
+				current = current.right;
+			// if the value is not greater nor less, it is equal! Found it!
+			} else {
+				found = true;
+			}
+		}
+
+		return found;
+	},
+
+	remove: function(value) {
+	},
+
+	size: function(){
+	},
+
+	toArray: function(){
+	},
+
+	toString: function(){
+	},
+
 }
