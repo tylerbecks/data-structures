@@ -224,7 +224,7 @@ BinarySearchTree.prototype = {
 				 	current = current.left;
 				 //if the new value is equal to the current one, just ignore
 				 } else {
-				 	console.log("Already exists in the tree.")
+				 	console.log("Already exists in the tree.");
 				 	break;
 				 }
 			}
@@ -275,19 +275,34 @@ BinarySearchTree.prototype = {
 		}
 
 		//start with the root
-		inOrder(this._root;)
+		inOrder(this._root);
 	},
 
 	remove: function(value) {
 	},
 
 	size: function(){
+		var count = 0;
+
+		this.traverse(function() {
+			count++;
+		});
+
+		return count;
 	},
 
 	toArray: function(){
+		var result = [];
+
+		this.traverse(function(node) {
+			result.push(node.value);
+		});
+
+		return result;
 	},
 
 	toString: function(){
-	},
+		return this.toArray().toString();
+	}
 
-}
+};
