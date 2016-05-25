@@ -255,6 +255,29 @@ BinarySearchTree.prototype = {
 		return found;
 	},
 
+	traverse: function(process) {
+
+		//helper function
+		function inOrder(node) {
+			if(node) {
+				// traverse the left subtree
+				if(node.left !== null) {
+					inOrder(node.left);
+				}
+
+				process.call(this, node);
+
+				//travers the right subtree
+				if(node.right !== null) {
+					inOrder(node.right);
+				}
+			}
+		}
+
+		//start with the root
+		inOrder(this._root;)
+	},
+
 	remove: function(value) {
 	},
 
