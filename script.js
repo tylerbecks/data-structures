@@ -279,6 +279,121 @@ BinarySearchTree.prototype = {
 	},
 
 	remove: function(value) {
+		var found = false;
+		var parent = null;
+		var current = this._root;
+		var childCount;
+		var replacement;
+		var replacementParent;
+
+		//make sure there's a node to search
+		while(!found && current) {
+
+			//if the value is less than the current node's, go left
+			if(value < current.value) {
+				parent = current;
+				current = current.left;
+
+			//if the value is greater than the current node's, go right
+			} else if(value > current.value) {
+				parent = current;
+				current = current.right;
+
+			// values are equal.  found it!
+			} else {
+				found = true;
+			}
+		}
+
+		//only proceed if the node was found
+		if(found) {
+
+			//figure out how many children
+			childCound = (current.left !== null ? 1 : 0) + 
+						 (current.right !== null ? 1: 0);
+
+			//special case: the value is the root
+			if(current === this._root){
+				if(childCount === 0) {
+					this._root = null;
+				}
+				if(childCount === 1) {
+					this._root = (current.right === null ? current.left : current.right);
+				}
+				if(childCount === 2) {
+					// start by going left
+					replacement = this._root.left;
+					// and then find the right-most leaf node to be the real new root
+					while(replacement.right !== null) {
+						replacementParent = replacement;
+						replacement = replacement.right;
+					}
+
+					// if it's not the first node on the left
+					if(replacementParent !== null) {
+						// remove the new root from it's previous position 
+						replacementParent.right = replacement.left;
+
+						// give the new root all of the old root's children
+						replacement.right = this._root.right;
+						replacement.left = this._root.left;
+					} else {
+						// just assign the children
+						replacement.right = this._root.right;
+					}
+
+					//ofiicially assign the new root
+					this._root = replacement;
+				}
+
+
+			// non-root values
+			} else {
+				// if no children, just remove it from the parent
+				if(childCount === 0) {
+					// if the current value is less than its parent's, null out the left pointer
+					if(current.value < parent.value) {
+						parent.left = null;
+					// if the current value is greater than the parent value, null out the right pointer
+					} else {
+						parent.right = null;
+					}
+				}
+				if(childCount === 1) {
+					// if the current value is less than its parent's, reset the left pointer
+					if(current.value < parent.value) {
+						parent.left = (current.left !== null ? current.left : current.right);
+					// if the current value is greater than the parent value, null out the right pointer
+					} else {
+						parent.right = (current.left !== null ? current.left : current.right);
+					}
+				}
+				if(childCount === 2) {
+					// reset pointers for new traversal
+					replacement = current.left;
+					replacementParent = current;
+
+					//find the right-most node
+					while(replacement.right !== null) {
+						replacementParent = replacement;
+						replacement = replacement.right;
+					}
+
+					replacementParent.right = replacement.left;
+
+					// assign children to the replacement
+					replacement.left = current.left;
+					replacement.right = current.right;
+
+					//place the replacement in the right spot
+					if(current.value < parent.value) {
+						parent.left = replacement;
+					} else {
+						parent.right = replacement;
+					}
+				}
+			}
+		}
 	},
 
 	size: function(){
